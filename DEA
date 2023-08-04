@@ -1,0 +1,40 @@
+import openai
+
+# 设置OpenAI API凭证
+openai.api_key = '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'
+
+# 定义CHATGPT 4.0的Engine ID
+engine_id = 'davinci-codex'
+
+def get_chat_response(prompt):
+    # 发送请求给OpenAI API
+    response = openai.Completion.create(
+        engine=engine_id,
+        prompt=prompt,
+        max_tokens=500,  # 调整生成文本的长度
+        temperature=0.7,  # 调整生成文本的多样性
+        n = 1,  # 调整生成多少个响应
+        stop=None,  # 可以设置一个停止词，用于终止生成文本
+        log_level="info"  # 可以选择显示更多的日志信息
+    )
+
+    # 从响应中提取生成的回答
+    chat_response = response.choices[0].text.strip()
+
+    return chat_response
+
+# 主程序循环
+while True:
+    # 用户输入问题或对话
+    user_input = input("用户：")
+
+    # 如果用户输入"退出"，则终止程序
+    if user_input.lower() == '退出':
+        break
+
+    # 添加用户输入作为提示并获取CHATGPT 4.0的响应
+    chat_prompt = f'用户：{user_input}\nAI：'
+    ai_response = get_chat_response(chat_prompt)
+
+    # 输出AI的回答
+    print("AI：" + ai_response)
